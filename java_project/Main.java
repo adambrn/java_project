@@ -1,3 +1,5 @@
+package java_project;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,42 +17,33 @@ import java.util.Random;
 Отфильтровать ноутбуки их первоначального множества и вывести проходящие по условиям. */
 
 public class Main {
-    public class Notebook {
 
-        String brand;
-        Number screenSize;
-        int hardDiskSize;
-        String cpuModel;
-        int ramSize;
-        String operatingSystem;
-        String graphicsCard;
+    public static void main(String[] args) {
 
-        public Notebook(String brand,
-                Number screenSize,
-                int hardDiskSize,
-                String cpuModel,
-                int ramSize,
-                String graphicsCard,
-                String operatingSystem) {
-
-            this.brand = brand;
-            this.screenSize = screenSize;
-            this.hardDiskSize = hardDiskSize;
-            this.cpuModel = cpuModel;
-            this.ramSize = ramSize;
-            this.graphicsCard = graphicsCard;
-            this.operatingSystem = operatingSystem;
-
+        System.out.print("\033[H\033[J");
+        List<Notebook> notebooks = createNotebookList();
+        for (Notebook notebook : notebooks) {
+            notebook.getNotebook();
         }
-
-        void getNotebook() {
-            System.out.println(brand + "/" + screenSize + "\"/" + cpuModel + "/" + ramSize + "GB/" + hardDiskSize + "GB/" + graphicsCard + "MB/" + operatingSystem);
-
+        System.out.println();
+        List<Notebook> searchresult = findNotebooks(notebooks, "Asus");
+        for (Notebook notebook : searchresult) {
+            notebook.getNotebook();
         }
 
     }
 
-    public static void main(String[] args) {
+    public static List<Notebook> findNotebooks(List<Notebook> notebooks, String search) {
+        List<Notebook> result = new ArrayList<>();
+        for(Notebook notebook : notebooks){
+        if(notebook.brand == search){
+        result.add(notebook);
+    }
+}
+        return result;
+    }
+
+    public static List<Notebook> createNotebookList() {
         List<String> brandList = Arrays.asList("Acer", "Asus", "HP", "Dell", "MSI", "Lenovo", "Samsung", "Sony");
         List<String> cpuList = Arrays.asList("Intel Core i9-12900H", "Intel Core i7-12700H", "Intel Core i5-12500H",
                 "AMD Ryzen 7 6800H", "AMD Ryzen 7 6800HS", "Intel Core i7-10700K", "Intel Core i7-1280P",
@@ -130,13 +123,13 @@ public class Main {
                 "Astra Linux");
 
         Random rand = new Random();
-        Main obj = new Main();
-        List<Notebook> price = new ArrayList<>();
 
-        int numberOfElements = 5;
+        List<Notebook> result = new ArrayList<>();
+
+        int numberOfElements = 20;
 
         for (int i = 0; i < numberOfElements; i++) {
-            Notebook note = obj.new Notebook(
+            Notebook note = new Notebook(
                     brandList.get(rand.nextInt(brandList.size())),
                     screenSizeList.get(rand.nextInt(screenSizeList.size())),
                     hardSizeList.get(rand.nextInt(hardSizeList.size())),
@@ -144,15 +137,9 @@ public class Main {
                     ramSizeList.get(rand.nextInt(ramSizeList.size())),
                     graficsCardList.get(rand.nextInt(graficsCardList.size())),
                     osList.get(rand.nextInt(osList.size())));
-            price.add(note);
+            result.add(note);
         }
-
-        System.out.print("\033[H\033[J");
-        
-        for (Notebook notebook : price) {
-            notebook.getNotebook();
-        }
-       
+        return result;
     }
 
 }
