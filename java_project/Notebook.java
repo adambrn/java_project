@@ -2,7 +2,7 @@ package java_project;
 public class Notebook {
 
     String brand;
-    Number screenSize;
+    double screenSize;
     int hardDiskSize;
     String cpuModel;
     int ramSize;
@@ -10,7 +10,7 @@ public class Notebook {
     String graphicsCard;
 
     public Notebook(String brand,
-            Number screenSize,
+            double screenSize,
             int hardDiskSize,
             String cpuModel,
             int ramSize,

@@ -2,8 +2,11 @@ package java_project;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Scanner;
 
 /* Подумать над структурой класса Ноутбук для магазина техники - выделить поля и методы. Реализовать в java.
 Создать множество ноутбуков.
@@ -19,27 +22,103 @@ import java.util.Random;
 public class Main {
 
     public static void main(String[] args) {
-
-        System.out.print("\033[H\033[J");
         List<Notebook> notebooks = createNotebookList();
-        for (Notebook notebook : notebooks) {
-            notebook.getNotebook();
+        Scanner in = new Scanner(System.in);
+        while (true) {
+            System.out.println("Выберите действие: ");
+            System.out.println("1 - Вывести все");
+            System.out.println("2 - Фильтры");
+            System.out.println("3 - Выход");
+
+            System.out.print("Введите число: ");
+            int num = in.nextInt();
+            if (num == 3)
+                break;
+            else if (num == 1) {
+                System.out.print("\033[H\033[J");
+                for (Notebook notebook : notebooks) {
+                    notebook.getNotebook();
+                }
+                System.out.println();
+            } else if (num == 2) {
+                System.out.print("\033[H\033[J");
+                filteringNotebooksList(notebooks);
+                System.out.println();
+            }
+
         }
-        System.out.println();
-        List<Notebook> searchresult = findNotebooks(notebooks, "Asus");
-        for (Notebook notebook : searchresult) {
-            notebook.getNotebook();
-        }
+        in.close();
+        System.out.print("\033[H\033[J");
 
     }
 
-    public static List<Notebook> findNotebooks(List<Notebook> notebooks, String search) {
+    public static Map<String, String> filteringNotebooksList(List<Notebook> notebooks) {
+        Map<String, String> filters = new HashMap<>();
+        filters.put("brand", "");
+        filters.put("screenSize", "");
+        filters.put("hardDiskSize", "");
+        filters.put("cpuModel", "");
+        filters.put("ramSize","");
+        filters.put("graphicsCard","");
+        filters.put( "operatingSystem","");
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.print("Выбраные фильтры: ");
+            System.out.print("Бренд: " + filters.get("brand"));
+            System.out.print(" Размер экрана(Больше): " + filters.get("screenSize"));
+
+            System.out.println();
+            System.out.println("Выберите фильтр: ");
+            System.out.println("1 - Производитель");
+            System.out.println("2 - Размер экрана");
+            System.out.println("3 - Обьем жесткого диска");
+            System.out.println("4 - Модель процессора");
+            System.out.println("5 - Объем оперативной памяти");
+            System.out.println("6 - Модель видеокарты");
+            System.out.println("7 - Операционная система");
+            System.out.println();
+            System.out.println("Применить фильтры - 0");
+            System.out.println();
+            System.out.print("Введите число: ");
+            int num = sc.nextInt();
+            if (num == 0) {
+                System.out.print("\033[H\033[J");
+                List<Notebook> searchresult = findNotebooks(notebooks, filters);
+                if(searchresult.size()!= 0 ){
+                for (Notebook notebook : searchresult) {
+                    notebook.getNotebook();
+                }
+            }
+            else{ System.out.println("По введенным критериям нет результатов");}
+                System.out.println("Нажмите Enter для продолжения...");
+                try {
+                    System.in.read();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return filters;
+            } else if (num == 1) {
+                System.out.print("\033[H\033[J");
+                System.out.print("Введите название производителя: ");
+                filters.put("brand", sc.next());
+            } else if (num == 2) {
+
+                System.out.print("\033[H\033[J");
+                System.out.print("Введите минимальный размер экрана: ");
+                filters.put("screenSize", sc.next());
+            }
+
+        }
+    }
+
+    public static List<Notebook> findNotebooks(List<Notebook> notebooks, Map<String, String> search) {
         List<Notebook> result = new ArrayList<>();
-        for(Notebook notebook : notebooks){
-        if(notebook.brand == search){
-        result.add(notebook);
-    }
-}
+        for (Notebook notebook : notebooks) {
+            if (notebook.brand.toLowerCase().contains(search.get("brand").toLowerCase()) && 
+            notebook.screenSize >= Double.parseDouble(search.get("screenSize"))) {
+                result.add(notebook);
+            }
+        }
         return result;
     }
 
@@ -97,7 +176,7 @@ public class Main {
                 "AMD A10 PRO-7350B", "Intel Celeron N4020", "AMD A9-9425", "AMD A6-9225", "Intel Pentium N3710",
                 "Intel Atom x7-Z8750", "Intel Celeron N3350", "Intel Atom x5-Z8350", "Intel Celeron 3867U",
                 "AMD A6-9220e", "AMD A4-9120e", "");
-        List<Number> screenSizeList = Arrays.asList(11, 11.6, 12, 13, 13.3, 14, 15, 15.4, 15, 6, 16, 16.1, 17, 17.3);
+        List<Double> screenSizeList = Arrays.asList(11.0, 11.6, 12.0, 13.0, 13.3, 14.0, 15.0, 15.4, 15.0, 16.0, 16.1, 17.0, 17.3);
         List<Integer> hardSizeList = Arrays.asList(120, 240, 500, 1000, 1500, 2000, 3000);
         List<Integer> ramSizeList = Arrays.asList(2, 4, 6, 8, 12, 16, 32, 64, 128);
         List<String> graficsCardList = Arrays.asList("AMD Radeon 660M", "AMD Radeon 680M", "AMD Radeon R3",
