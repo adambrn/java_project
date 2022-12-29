@@ -58,14 +58,26 @@ public class Main {
         filters.put("screenSize", "");
         filters.put("hardDiskSize", "");
         filters.put("cpuModel", "");
-        filters.put("ramSize","");
-        filters.put("graphicsCard","");
-        filters.put( "operatingSystem","");
+        filters.put("ramSize", "");
+        filters.put("graphicsCard", "");
+        filters.put("operatingSystem", "");
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Выбраные фильтры: ");
-            System.out.print("Бренд: " + filters.get("brand"));
-            System.out.print(" Размер экрана(Больше): " + filters.get("screenSize"));
+            if (filters.get("brand") != "")
+                System.out.print("Бренд: " + filters.get("brand") + " ");
+            if (filters.get("screenSize") != "")
+                System.out.print("Размер экрана(Больше): " + filters.get("screenSize") + " ");
+            if (filters.get("hardDiskSize") != "")
+                System.out.print("Размер HDD(Больше): " + filters.get("hardDiskSize") + " ");
+            if (filters.get("cpuModel") != "")
+                System.out.print("Процессор: " + filters.get("cpuModel") + " ");
+            if (filters.get("ramSize") != "")
+                System.out.print("Размер RAM(Больше): " + filters.get("ramSize") + " ");
+            if (filters.get("graphicsCard") != "")
+                System.out.print("Видеокарта: " + filters.get("graphicsCard") + " ");
+            if (filters.get("operatingSystem") != "")
+                System.out.print("ОС: " + filters.get("operatingSystem") + " ");
 
             System.out.println();
             System.out.println("Выберите фильтр: ");
@@ -84,12 +96,13 @@ public class Main {
             if (num == 0) {
                 System.out.print("\033[H\033[J");
                 List<Notebook> searchresult = findNotebooks(notebooks, filters);
-                if(searchresult.size()!= 0 ){
-                for (Notebook notebook : searchresult) {
-                    notebook.getNotebook();
+                if (searchresult.size() != 0) {
+                    for (Notebook notebook : searchresult) {
+                        notebook.getNotebook();
+                    }
+                } else {
+                    System.out.println("По введенным критериям нет результатов");
                 }
-            }
-            else{ System.out.println("По введенным критериям нет результатов");}
                 System.out.println("Нажмите Enter для продолжения...");
                 try {
                     System.in.read();
@@ -106,16 +119,48 @@ public class Main {
                 System.out.print("\033[H\033[J");
                 System.out.print("Введите минимальный размер экрана: ");
                 filters.put("screenSize", sc.next());
-            }
+            } else if (num == 3) {
 
+                System.out.print("\033[H\033[J");
+                System.out.print("Введите минимальный размер HDD: ");
+                filters.put("hardDiskSize", sc.next());
+            } else if (num == 4) {
+
+                System.out.print("\033[H\033[J");
+                System.out.print("Введите часть названия процессора: ");
+                filters.put("cpuModel", sc.next());
+            } else if (num == 5) {
+
+                System.out.print("\033[H\033[J");
+                System.out.print("Введите минимальный размер RAM: ");
+                filters.put("ramSize", sc.next());
+            } else if (num == 6) {
+
+                System.out.print("\033[H\033[J");
+                System.out.print("Введите название видеокарты: ");
+                filters.put("graphicsCard", sc.next());
+            } else if (num == 7) {
+
+                System.out.print("\033[H\033[J");
+                System.out.print("Введите операционную систему: ");
+                filters.put("operatingSystem", sc.next());
+            }
         }
     }
 
     public static List<Notebook> findNotebooks(List<Notebook> notebooks, Map<String, String> search) {
         List<Notebook> result = new ArrayList<>();
         for (Notebook notebook : notebooks) {
-            if (notebook.brand.toLowerCase().contains(search.get("brand").toLowerCase()) && 
-            notebook.screenSize >= Double.parseDouble(search.get("screenSize"))) {
+            if (search.get("screenSize") == "") search.put("screenSize", "0");
+            if (search.get("hardDiskSize") == "") search.put("hardDiskSize", "0");
+            if (search.get("ramSize") == "") search.put("ramSize", "0");
+            if (notebook.brand.toLowerCase().contains(search.get("brand").toLowerCase()) &&
+                    notebook.screenSize >= Double.parseDouble(search.get("screenSize")) &&
+                    notebook.hardDiskSize >= Integer.parseInt(search.get("hardDiskSize")) &&
+                    notebook.cpuModel.toLowerCase().contains(search.get("cpuModel").toLowerCase()) &&
+                    notebook.ramSize >= Integer.parseInt(search.get("ramSize")) &&
+                    notebook.graphicsCard.toLowerCase().contains(search.get("graphicsCard").toLowerCase()) &&
+                    notebook.operatingSystem.toLowerCase().contains(search.get("operatingSystem").toLowerCase())) {
                 result.add(notebook);
             }
         }
@@ -176,7 +221,8 @@ public class Main {
                 "AMD A10 PRO-7350B", "Intel Celeron N4020", "AMD A9-9425", "AMD A6-9225", "Intel Pentium N3710",
                 "Intel Atom x7-Z8750", "Intel Celeron N3350", "Intel Atom x5-Z8350", "Intel Celeron 3867U",
                 "AMD A6-9220e", "AMD A4-9120e", "");
-        List<Double> screenSizeList = Arrays.asList(11.0, 11.6, 12.0, 13.0, 13.3, 14.0, 15.0, 15.4, 15.0, 16.0, 16.1, 17.0, 17.3);
+        List<Double> screenSizeList = Arrays.asList(11.0, 11.6, 12.0, 13.0, 13.3, 14.0, 15.0, 15.4, 15.0, 16.0, 16.1,
+                17.0, 17.3);
         List<Integer> hardSizeList = Arrays.asList(120, 240, 500, 1000, 1500, 2000, 3000);
         List<Integer> ramSizeList = Arrays.asList(2, 4, 6, 8, 12, 16, 32, 64, 128);
         List<String> graficsCardList = Arrays.asList("AMD Radeon 660M", "AMD Radeon 680M", "AMD Radeon R3",
